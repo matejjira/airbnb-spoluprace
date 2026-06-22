@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pojďme do toho spolu, Michale</title>
+<style>
+  :root{
+    --green:#33524a; --green-dark:#25403a; --green-soft:#e8efe9;
+    --cream:#f4f1ea; --card:#ffffff; --ink:#2a2a28; --muted:#5f6460;
+    --line:#e2ddd2; --gold:#b8923f; --good:#2f7d5b; --bad:#b4533a;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+  section{padding:56px 0}
+  h1{font-size:42px;font-weight:700;line-height:1.15;letter-spacing:-0.5px}
+  h2{font-size:28px;font-weight:700;margin-bottom:8px;letter-spacing:-0.3px}
+  h3{font-size:18px;font-weight:600}
+  p.lead{font-size:19px;color:var(--muted);margin-top:16px}
+  .sub{color:var(--muted);margin-bottom:28px;font-size:16px}
+
+  .hero{background:var(--green);color:#fff;padding:72px 0 64px;border-radius:0 0 var(--radius) var(--radius)}
+  .hero h1{color:#fff}
+  .hero p.lead{color:#cdddd4}
+  .tag{display:inline-block;background:rgba(255,255,255,.14);color:#eaf2ed;font-size:14px;
+    padding:6px 14px;border-radius:30px;margin-bottom:22px}
+  .chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    padding:16px 18px;flex:1;min-width:150px}
+  .chip .n{font-size:26px;font-weight:700;color:#fff}
+  .chip .l{font-size:13px;color:#bccfc6;margin-top:2px}
+
+  .grid{display:grid;gap:18px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .card .ic{width:42px;height:42px;border-radius:11px;background:var(--green-soft);color:var(--green);
+    display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;margin-bottom:14px}
+  .card h3{margin-bottom:6px}
+  .card p{font-size:15px;color:var(--muted)}
+
+  .step{display:flex;gap:18px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .step .num{flex:0 0 40px;height:40px;width:40px;border-radius:50%;background:var(--green);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .step h3{margin-bottom:3px}
+  .step p{color:var(--muted);font-size:15px}
+
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.4px}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr.total td{border-top:2px solid var(--green);border-bottom:0;font-weight:700;font-size:16px}
+
+  .scen{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .scen .s{border:1px solid var(--line);border-radius:14px;padding:20px;background:var(--card);text-align:center}
+  .scen .s.mid{border:2px solid var(--green);background:var(--green-soft)}
+  .scen .s .label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .scen .s .big{font-size:30px;font-weight:700;color:var(--green);margin:8px 0 2px}
+  .scen .s .small{font-size:13px;color:var(--muted)}
+
+  .calc{background:var(--green-dark);color:#fff;border-radius:var(--radius);padding:34px;margin-top:8px}
+  .calc h3{color:#fff;font-size:20px}
+  .calc .row{display:flex;align-items:center;gap:14px;margin:18px 0}
+  .calc .row label{flex:0 0 168px;font-size:15px;color:#cdddd4}
+  .calc input[type=range]{flex:1;accent-color:var(--gold);height:5px}
+  .calc .val{flex:0 0 120px;text-align:right;font-weight:700;font-size:16px;font-variant-numeric:tabular-nums}
+  .calc .out{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:26px}
+  .calc .o{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:16px 18px}
+  .calc .o .k{font-size:13px;color:#bccfc6}
+  .calc .o .v{font-size:24px;font-weight:700;margin-top:3px}
+  .calc .o.hl{background:var(--gold);border-color:var(--gold);color:#3a2c08}
+  .calc .o.hl .k{color:#5e4a13}
+  .calc .note{font-size:12.5px;color:#9fb3aa;margin-top:18px;line-height:1.5}
+
+  .pf{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .pf .b{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .pf .b .top{font-size:14px;color:var(--muted)}
+  .pf .b .bars{display:flex;justify-content:center;align-items:flex-end;gap:5px;height:64px;margin:14px 0}
+  .pf .b .bar{width:16px;background:var(--green);border-radius:4px 4px 0 0}
+  .pf .b .amt{font-size:22px;font-weight:700;color:var(--green)}
+  .pf .b .yr{font-size:13px;color:var(--muted)}
+
+  .fair{background:var(--green-soft);border-radius:var(--radius);padding:34px;border:1px solid #d4e0d6}
+  .fair p{font-size:16px;color:#33433c;margin-top:10px}
+  .quote{font-size:21px;font-weight:600;color:var(--green-dark);line-height:1.45}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  .split .who{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .split .who h4{font-size:16px;margin-bottom:10px}
+  .split .who li{list-style:none;font-size:14.5px;color:var(--muted);padding:5px 0 5px 24px;position:relative}
+  .split .who li:before{content:"✓";position:absolute;left:0;color:var(--good);font-weight:700}
+
+  .cta{background:var(--green);color:#fff;border-radius:var(--radius);padding:48px;text-align:center}
+  .cta h2{color:#fff}
+  .cta p{color:#cdddd4;margin:10px 0 0;font-size:17px}
+
+  .foot{text-align:center;color:var(--muted);font-size:13px;padding:30px 0 50px}
+  @media(max-width:720px){
+    h1{font-size:32px} h2{font-size:24px}
+    .g3,.g2,.scen,.pf,.split,.calc .out{grid-template-columns:1fr}
+    .calc .row label{flex-basis:120px}
+    .calc .val{flex-basis:90px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">Návrh spolupráce - Matěj &amp; Michal</span>
+    <h1>Pojďme do toho spolu, Michale</h1>
+    <p class="lead">Já koupím a zafinancuju byty, ty je rozjedeš na Airbnb. Z čistého zisku jdeme férově půl na půl. Bez tvého kapitálu, bez tvého finančního rizika.</p>
+    <div class="chips">
+      <div class="chip"><div class="n">0 Kč</div><div class="l">tvoje investice</div></div>
+      <div class="chip"><div class="n">50/50</div><div class="l">rovný díl ze zisku</div></div>
+      <div class="chip"><div class="n">~7 800 Kč</div><div class="l">tvůj měsíční podíl z 1. bytu</div></div>
+      <div class="chip"><div class="n">víc bytů</div><div class="l">postupně rosteme</div></div>
+    </div>
+    <p style="margin-top:24px;color:#aec3b9;font-size:14px">Připravil Matěj Jíra pro Michala</p>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2>Jak to funguje</h2>
+  <p class="sub">Tři kroky, jasné role. Každý dělá to, co umí nejlíp.</p>
+  <div class="step"><div class="num">1</div><div><h3>Já koupím a zafinancuju byt</h3><p>Dám 10 % akontaci z vlastního, zbytek na hypotéku. Beru na sebe celé riziko financování i vlastnictví.</p></div></div>
+  <div class="step"><div class="num">2</div><div><h3>Ty ho rozjedeš a spravuješ jako Airbnb</h3><p>Zařízení, focení, ceny, komunikace s hosty, úklid, optimalizace obsazenosti. Tvoje parketa, tvoje know-how.</p></div></div>
+  <div class="step"><div class="num">3</div><div><h3>Z příjmu odečteme všechny náklady a zbytek dělíme 50/50</h3><p>Od měsíčního příjmu odečteme úplně všechno - moji hypotéku, energie, poplatky, provoz. Co zbyde, je čistý zisk a ten jde půl na půl.</p></div></div>
+</section>
+
+<section class="wrap">
+  <h2>Co z toho máš ty</h2>
+  <p class="sub">Tohle není agenturní model, kde bereš zlomek. Jsi partner.</p>
+  <div class="grid g3">
+    <div class="card"><div class="ic">0</div><h3>Nulový kapitál</h3><p>Nedáváš ani korunu. Byt kupuju a financuju já. Ty vkládáš čas a um, ne peníze.</p></div>
+    <div class="card"><div class="ic">↓</div><h3>Nulové finanční riziko</h3><p>V nejhorším měsíci vyděláš nulu, nikdy nejdeš do mínusu. Případnou ztrátu nesu já, je to moje hypotéka.</p></div>
+    <div class="card"><div class="ic">↗</div><h3>Odměna roste s výkonem</h3><p>Čím líp byt rozjedeš, tím víc oba vyděláme. Žádný strop, žádné krácení. Tvoje práce = tvůj zisk.</p></div>
+    <div class="card"><div class="ic">⌂</div><h3>Budujeme portfolio</h3><p>Tohle je první byt. Plánuju kupovat další a ty bys je spravoval taky. Tvůj příjem roste, aniž bys investoval.</p></div>
+    <div class="card"><div class="ic">=</div><h3>Férové 50/50</h3><p>Rovný díl z čistého zisku. Chci, abys měl motivaci a aby to bylo dlouhodobě fér pro oba.</p></div>
+    <div class="card"><div class="ic">◎</div><h3>Plná transparentnost</h3><p>Sdílený přehled rezervací i nákladů. Každý měsíc vidíš přesně, z čeho se počítá tvůj podíl.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Případová studie: byt na Truhlářské</h2>
+  <p class="sub">Reálný byt, který teď zvažuju. 1+1, 35 m², Praha 1 u Náměstí Republiky, zařízený, dům už Airbnb provozuje.</p>
+  <div class="card">
+    <h3 style="margin-bottom:14px">Veškeré měsíční náklady</h3>
+    <table>
+      <tr><td>Splátka hypotéky (90 % ze 7,25 mil., 5 %, 30 let)</td><td class="r">35 029 Kč</td></tr>
+      <tr><td>Poplatky domu (fond oprav, správa, teplo, voda)</td><td class="r">3 200 Kč</td></tr>
+      <tr><td>Elektřina</td><td class="r">1 800 Kč</td></tr>
+      <tr><td>Internet + TV</td><td class="r">600 Kč</td></tr>
+      <tr><td>Pojištění</td><td class="r">500 Kč</td></tr>
+      <tr><td>Daň z nemovitosti</td><td class="r">150 Kč</td></tr>
+      <tr><td>Spotřební materiál + prádlo</td><td class="r">1 200 Kč</td></tr>
+      <tr><td>Rezerva na opravy a opotřebení</td><td class="r">1 500 Kč</td></tr>
+      <tr><td>Poplatek platformě Airbnb (~3 %)</td><td class="r">1 841 Kč</td></tr>
+      <tr class="total"><td>Celkové měsíční náklady</td><td class="r">45 820 Kč</td></tr>
+    </table>
+  </div>
+  <div style="height:18px"></div>
+  <h3 style="margin-bottom:10px">Tvůj podíl podle toho, jak byt rozjedeš</h3>
+  <div class="scen">
+    <div class="s"><div class="label">Konzervativní</div><div class="big">3 230 Kč</div><div class="small">obsazenost ~53 %<br>příjem 52 000 Kč/měs</div></div>
+    <div class="s mid"><div class="label">Realistický</div><div class="big">7 780 Kč</div><div class="small">obsazenost ~62 %<br>příjem 61 380 Kč/měs</div></div>
+    <div class="s"><div class="label">Optimistický</div><div class="big">11 960 Kč</div><div class="small">obsazenost ~71 %<br>příjem 70 000 Kč/měs</div></div>
+  </div>
+  <div style="height:26px"></div>
+  <h3 style="margin-bottom:10px">Jak jsem k číslům došel</h3>
+  <p class="sub" style="margin-bottom:14px">Žádné číslo není vycucané z prstu. Tady je, z čeho každé vychází.</p>
+  <div class="card">
+    <table>
+      <tr><td style="width:34%;vertical-align:top;font-weight:600;color:var(--green)">Denní sazba 3 300 Kč</td><td style="color:var(--muted)">Data AirROI a Airbtics pro Prahu 1 ukazují průměrnou denní sazbu kolem 130-160 USD (~3 000-3 700 Kč). Pro zařízený 1+1 u Náměstí Republiky beru 3 300 Kč jako realistický střed - výborná lokalita, ale běžný byt, ne luxus.</td></tr>
+      <tr><td style="vertical-align:top;font-weight:600;color:var(--green)">Obsazenost 62 %</td><td style="color:var(--muted)">Průměrná obsazenost Airbnb v Praze 1 je dle AirROI kolem 60 %. Beru mírně nad průměr, protože dům už krátkodobé pronájmy úspěšně provozuje a při dobré správě se dá čekat nadprůměrný výkon.</td></tr>
+      <tr><td style="vertical-align:top;font-weight:600;color:var(--green)">Splátka 35 029 Kč</td><td style="color:var(--muted)">Anuitní splátka z hypotéky 6 525 000 Kč (90 % ceny), úrok 5 % p.a., splatnost 30 let. Akontaci 10 % (725 000 Kč) platím z vlastního.</td></tr>
+      <tr><td style="vertical-align:top;font-weight:600;color:var(--green)">Poplatky domu 3 200 Kč</td><td style="color:var(--muted)">Dle inzerátu jsou měsíční poplatky domu zhruba 3 178 Kč (fond oprav, správa domu, teplo, voda, společné prostory).</td></tr>
+      <tr><td style="vertical-align:top;font-weight:600;color:var(--green)">Energie a provoz</td><td style="color:var(--muted)">Tržní odhad pro byt 35 m² v energetické třídě G, plus spotřební materiál, prádlo a rezerva na opotřebení (Airbnb opotřebovává rychleji než vlastní bydlení).</td></tr>
+      <tr><td style="vertical-align:top;font-weight:600;color:var(--green)">Tři scénáře</td><td style="color:var(--muted)">Konzervativní počítá s obsazeností ~53 %, optimistický s ~71 %. Ať vidíš celé reálné rozpětí, ne jen jedno číslo. Bod zvratu (kdy je zisk nulový) je kolem 46 % obsazenosti, takže máme slušnou rezervu.</td></tr>
+    </table>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:16px">Stejné číslo bereme oba - tvůj podíl je polovina čistého zisku. Finální čísla u konkrétního bytu vždy ověřím proti reálným inzerátům na Airbnb.</p>
+</section>
+
+<section class="wrap">
+  <h2>Spočítej si to sám</h2>
+  <p class="sub">Pohni s posuvníky a hned uvidíš, kolik bereš ty i já. Tohle jsou živá čísla, ne sliby.</p>
+  <div class="calc">
+    <h3>Kalkulačka spolupráce</h3>
+    <div class="row"><label>Cena bytu</label><input type="range" id="c_cena" min="3500000" max="9000000" step="50000" value="7250000"><span class="val" id="v_cena"></span></div>
+    <div class="row"><label>Denní sazba (ADR)</label><input type="range" id="c_adr" min="1800" max="5000" step="50" value="3300"><span class="val" id="v_adr"></span></div>
+    <div class="row"><label>Obsazenost</label><input type="range" id="c_occ" min="35" max="85" step="1" value="62"><span class="val" id="v_occ"></span></div>
+    <div class="row"><label>Úrok hypotéky</label><input type="range" id="c_ur" min="3" max="7" step="0.1" value="5"><span class="val" id="v_ur"></span></div>
+    <div class="out">
+      <div class="o"><div class="k">Hrubý příjem / měs</div><div class="v" id="o_gross"></div></div>
+      <div class="o"><div class="k">Měsíční splátka hypotéky</div><div class="v" id="o_spl"></div></div>
+      <div class="o"><div class="k">Všechny náklady / měs</div><div class="v" id="o_nak"></div></div>
+      <div class="o"><div class="k">Čistý zisk k rozdělení</div><div class="v" id="o_pool"></div></div>
+      <div class="o hl"><div class="k">Tvůj podíl (Michal) / měs</div><div class="v" id="o_mich"></div></div>
+      <div class="o"><div class="k">Můj podíl (Matěj) / měs</div><div class="v" id="o_mat"></div></div>
+    </div>
+    <p class="note">Provozní náklady (mimo splátku a poplatek platformě) počítám fixně 8 950 Kč/měs. Akontaci 10 % a celou hypotéku platím já, proto se z čistého zisku dělíme napůl. Když náklady přesáhnou příjem, ty bereš nulu a ztrátu řeším já.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>A tohle je teprve začátek</h2>
+  <p class="sub">Cíl není jeden byt. Čím víc bytů koupím, tím víc spravuješ ty - tvůj příjem roste, kapitál dál dávám já.</p>
+  <div class="pf">
+    <div class="b"><div class="top">1 byt</div><div class="bars"><div class="bar" style="height:21px"></div></div><div class="amt">~7 800 Kč</div><div class="yr">tvůj příjem / měs</div></div>
+    <div class="b"><div class="top">2 byty</div><div class="bars"><div class="bar" style="height:21px"></div><div class="bar" style="height:42px"></div></div><div class="amt">~15 600 Kč</div><div class="yr">tvůj příjem / měs</div></div>
+    <div class="b"><div class="top">3 byty</div><div class="bars"><div class="bar" style="height:21px"></div><div class="bar" style="height:42px"></div><div class="bar" style="height:63px"></div></div><div class="amt">~23 400 Kč</div><div class="yr">tvůj příjem / měs</div></div>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:16px">Realistický scénář, orientačně. Buduješ si stálý přivýdělek z portfolia, do kterého jsi nevložil ani korunu.</p>
+</section>
+
+<section class="wrap">
+  <div class="fair">
+    <h2>Proč chci jít rovně půl na půl</h2>
+    <p class="quote">"Můžu si najmout agenturu, která vezme 20 % z obratu. Ale chci do toho jít s tebou, protože ti věřím a vím, že to budeš dělat naplno. A když do toho dáš svůj čas a um, je fér, abys měl rovný díl. Proto 50/50."</p>
+    <div class="split">
+      <div class="who">
+        <h4>Ty dostáváš</h4>
+        <li>50 % z čistého zisku každý měsíc</li>
+        <li>Žádný vložený kapitál</li>
+        <li>Žádné finanční riziko</li>
+        <li>Rostoucí příjem s každým dalším bytem</li>
+      </div>
+      <div class="who">
+        <h4>Já dostávám</h4>
+        <li>50 % z čistého zisku</li>
+        <li>Splácení jistiny a hodnotu bytu (nesu hypotéku i riziko)</li>
+        <li>Spolehlivého partnera na správu</li>
+        <li>Možnost škálovat na víc bytů</li>
+      </div>
+    </div>
+    <p style="font-size:13.5px;color:#56655d;margin-top:18px">Na rovinu: jistina a růst ceny bytu zůstávají mně, protože nesu hypotéku a celé finanční riziko. Tvůj díl je polovina cashflow za tvou práci. Vše dáme písemně, ať je to čisté pro oba.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="cta">
+    <h2>Pojďme si o tom sednout</h2>
+    <p>Projdeme čísla, doladíme podmínky a když to bude dávat smysl oběma, jdeme do prvního bytu.</p>
+  </div>
+</section>
+
+<div class="foot wrap">Připravil Matěj Jíra. Orientační propočet z tržních dat (AirROI, cenové mapy Praha, 06/2026). Finální čísla ověříme u konkrétního bytu. Daně a smlouvu nastavíme s účetním a právníkem.</div>
+
+<script>
+  function fmt(n){return Math.round(n).toLocaleString('cs-CZ')+' Kč';}
+  function factor(rate){var i=rate/100/12;return i/(1-Math.pow(1+i,-360));}
+  var PROVOZ=8950;
+  function calc(){
+    var cena=+document.getElementById('c_cena').value;
+    var adr=+document.getElementById('c_adr').value;
+    var occ=+document.getElementById('c_occ').value;
+    var ur=+document.getElementById('c_ur').value;
+    document.getElementById('v_cena').textContent=Math.round(cena).toLocaleString('cs-CZ');
+    document.getElementById('v_adr').textContent=Math.round(adr).toLocaleString('cs-CZ');
+    document.getElementById('v_occ').textContent=occ+' %';
+    document.getElementById('v_ur').textContent=ur.toFixed(1)+' %';
+    var splatka=cena*0.9*factor(ur);
+    var gross=adr*30*(occ/100);
+    var platform=gross*0.03;
+    var naklady=splatka+PROVOZ+platform;
+    var pool=gross-naklady;
+    var podil=pool/2;
+    document.getElementById('o_gross').textContent=fmt(gross);
+    document.getElementById('o_spl').textContent=fmt(splatka);
+    document.getElementById('o_nak').textContent=fmt(naklady);
+    document.getElementById('o_pool').textContent=fmt(pool);
+    var mich=document.getElementById('o_mich');
+    var mat=document.getElementById('o_mat');
+    mich.textContent=fmt(podil);
+    mat.textContent=fmt(podil);
+    if(pool<0){mich.textContent='0 Kč';mat.textContent=fmt(pool);}
+  }
+  document.querySelectorAll('.calc input').forEach(function(el){el.addEventListener('input',calc);});
+  calc();
+</script>
+</body>
+</html>
